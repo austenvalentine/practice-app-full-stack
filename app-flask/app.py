@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 from flask import Flask
 from resources.session import Session
-from resources.user import User
+from resources.user import User, Users
 from db import db
 import app_config
 
