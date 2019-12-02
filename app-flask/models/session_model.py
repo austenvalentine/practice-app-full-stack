@@ -1,14 +1,11 @@
-from flask_sqlalchemy import SQLAlchemy
-
-db = SQLAlchemy()
+from db import db
 
 class SessionModel(db.Model):
-
     __tablename__="sessions"
 
     idkey = db.Column(db.Integer, primary_key=True )
     user_id = db.Column(db.Integer, db.ForeignKey('users.idkey'))
-    date = db.Column(db.DateTime
+    date = db.Column(db.DateTime)
     goal = db.Column(db.String(128))
     win = db.Column(db.String(128))
     difficulty = db.Column(db.String(128))
@@ -36,3 +33,5 @@ class SessionModel(db.Model):
     def delete(self):
         db.session.delete(self)
         db.session.commit()
+
+

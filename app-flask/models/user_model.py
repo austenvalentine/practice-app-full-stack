@@ -1,9 +1,7 @@
-from flask_sqlalchemy import SQLAlchemy
-
-db = SQLAlchemy()
+from db import db
 
 class UserModel(db.Model):
-    tablename = "users"
+    __tablename__ = "users"
 
     idkey = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), unique=True)
@@ -49,4 +47,5 @@ class UserModel(db.Model):
 
     def delete(self):
         db.session.delete(self)
-        db.session.commit()      
+        db.session.commit()
+
