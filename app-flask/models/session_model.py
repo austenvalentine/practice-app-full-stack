@@ -1,18 +1,19 @@
 from db import db
+import datetime
 
 class SessionModel(db.Model):
     __tablename__="sessions"
 
     idkey = db.Column(db.Integer, primary_key=True )
-    user_id = db.Column(db.Integer, db.ForeignKey('users.idkey'))
-    date = db.Column(db.DateTime)
-    goal = db.Column(db.String(128))
-    win = db.Column(db.String(128))
-    difficulty = db.Column(db.String(128))
-    plan = db.Column(db.String(128))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.idkey'), nullable=False)
+    date = db.Column(db.DateTime, nullable=False, default=datetime.datetime.utcnow)
+    goal = db.Column(db.String(64), default="Staying focused is the goal.")
+    win = db.Column(db.String(64), default="I'm committed to regular study.")
+    difficulty = db.Column(db.String(64), default="No difficulties stood out.")
+    plan = db.Column(db.String(64), default="I'm open to suggestions for improvement.")
 
-    def __init__(self, user_id=None, goal='', win='', difficulty='', plan=''):
-        self.user_id = user_id
+    def __init__(self, user, goal='', win='', difficulty='', plan=''):
+        self.user_id = user.idkey
         self.goal = goal
         self.win = win
         self.difficulty = difficulty
