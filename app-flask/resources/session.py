@@ -13,3 +13,7 @@ class Session(Resource):
 
     def put(self):
         pass
+
+class Sessions(Resource):
+    def get(self):
+        pass

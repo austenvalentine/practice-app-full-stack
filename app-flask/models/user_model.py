@@ -1,5 +1,6 @@
 from db import db
 
+
 class UserModel(db.Model):
     __tablename__ = "users"
 
@@ -13,17 +14,24 @@ class UserModel(db.Model):
         self.email = email
         self.hash_pw = hash_pw
 
+    def json(self):
+        return { 
+            "idkey": self.idkey,
+            "username": self.username,
+            "email": self.email
+        }
+
     @classmethod
-    def find_by_id(cls, idkey):
-        return db.session.query.filter_by(idkey=idkey).first()
+    def find_by_id(cls, user):
+        return cls.query.filter_by(idkey=idkey).first()
 
     @classmethod
     def find_by_username(cls, username):
-        return db.session.query.filter_by(username=username).first()
+        return cls.query.filter_by(username=username).first()
 
     @classmethod
     def find_by_email(cls, email):
-        return db.session.query.filter_by(email=email).first()
+        return cls.query.filter_by(email=email).first()
 
     def update_email(self, email):
         if UserModel.find_by_email(email):
@@ -38,7 +46,7 @@ class UserModel(db.Model):
         db.session.commit()
 
     def update_pw(self, pw):
-        self.hash_pw = pw
+        self.hash_pw = pw   
         db.session.commit()
 
     def add(self):

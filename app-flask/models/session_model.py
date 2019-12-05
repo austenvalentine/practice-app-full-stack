@@ -1,12 +1,12 @@
 from db import db
-import datetime
+from datetime import datetime
 
 class SessionModel(db.Model):
     __tablename__="sessions"
 
     idkey = db.Column(db.Integer, primary_key=True )
     user_id = db.Column(db.Integer, db.ForeignKey('users.idkey'), nullable=False)
-    date = db.Column(db.DateTime, nullable=False, default=datetime.datetime.utcnow)
+    date = db.Column(db.DateTime, nullable=False, default=lambda: datetime.utcnow().timestamp())
     goal = db.Column(db.String(64), default="Staying focused is the goal.")
     win = db.Column(db.String(64), default="I'm committed to regular study.")
     difficulty = db.Column(db.String(64), default="No difficulties stood out.")
@@ -19,6 +19,13 @@ class SessionModel(db.Model):
         self.difficulty = difficulty
         self.plan = plan
     
+    def json(self):
+        return { 
+            "idkey": self.idkey,
+            "user_id": self.user_id,
+            "date": self.date
+        }
+
     @classmethod
     def find_by_id(self, idkey):
         return db.session.query.filter_by(idkey=idkey).first()
