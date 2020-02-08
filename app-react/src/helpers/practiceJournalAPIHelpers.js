@@ -6,6 +6,9 @@ const practiceAppAPI = {
     this.data.push(newSession);
     console.log("data:", this.data);
   },
+  getSessions: function() {
+    return this.data;
+  },
   init: function() {
     const dummyData = [
       {
@@ -15,7 +18,7 @@ const practiceAppAPI = {
         nextStep: "use the metronome"
       },
       {
-        focus: "swing",
+        focus: "swinging",
         win: "swung",
         challenge: "meaning a thing",
         nextStep: "swing harder"

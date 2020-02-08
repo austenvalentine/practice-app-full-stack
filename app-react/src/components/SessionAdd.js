@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { practiceAppAPI } from "./helpers/practiceJournalAPIHelpers";
-import "./App.css";
+import { practiceAppAPI } from "../helpers/practiceJournalAPIHelpers";
 
 function SessionAdd() {
   const [focus, setFocus] = useState("");
@@ -23,7 +22,7 @@ function SessionAdd() {
 
   return (
     <div className="App">
-      <h1>Log Session</h1>
+      <h2>Log Session</h2>
       <form>
         <label htmlFor="focus">Focus: </label>
         <input
