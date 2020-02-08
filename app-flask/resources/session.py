@@ -1,12 +1,20 @@
-from flask_restful import Resource
+from flask_restful import Resource, reqparse
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from models.session_model import SessionModel
+from models.user_model import UserModel
+
+
+
 
 class Session(Resource):
+    @jwt_required
     def get(self):
-        pass
-    
+        _id = get_jwt_identity()
+        return UserModel.find_by_id(_id).json()
+
+    @jwt_required
     def post(self):
-        pass
+        return {"message": "you have access"}
     
     def delete(self):
         pass
@@ -15,5 +23,6 @@ class Session(Resource):
         pass
 
 class Sessions(Resource):
-    def get(self):
-        pass
+    _session_parser = reqparse.RequestParser()
+    def get(self, userid):
+        return [session.json() for session in SessionModel.find_by_user(userid)]

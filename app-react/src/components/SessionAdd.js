@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { practiceAppAPI } from "./helpers/practiceJournalAPIHelpers";
 import "./App.css";
 
-function App() {
+function SessionAdd() {
   const [focus, setFocus] = useState("");
   const [win, setWin] = useState("");
   const [challenge, setChallenge] = useState("");
@@ -14,11 +14,13 @@ function App() {
     setChallenge("");
     setNextStep("");
   }
+
   function handleClick(e) {
     e.preventDefault();
     practiceAppAPI.createSession({ focus, win, challenge, nextStep });
     clearForm();
   }
+
   return (
     <div className="App">
       <h1>Log Session</h1>
@@ -57,4 +59,4 @@ function App() {
   );
 }
 
-export default App;
+export default SessionAdd;

@@ -6,7 +6,7 @@ class SessionModel(db.Model):
 
     idkey = db.Column(db.Integer, primary_key=True )
     user_id = db.Column(db.Integer, db.ForeignKey('users.idkey'), nullable=False)
-    date = db.Column(db.DateTime, nullable=False, default=lambda: datetime.utcnow().timestamp())
+    date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     goal = db.Column(db.String(64), default="Staying focused is the goal.")
     win = db.Column(db.String(64), default="I'm committed to regular study.")
     difficulty = db.Column(db.String(64), default="No difficulties stood out.")
@@ -23,16 +23,17 @@ class SessionModel(db.Model):
         return { 
             "idkey": self.idkey,
             "user_id": self.user_id,
-            "date": self.date
+            "date": self.date.timestamp()
+
         }
 
     @classmethod
-    def find_by_id(self, idkey):
-        return db.session.query.filter_by(idkey=idkey).first()
+    def find_by_id(cls, idkey):
+        return cls.query.filter_by(idkey=idkey).first()
 
     @classmethod
-    def find_by_user(self, user_id):
-        return db.session.query.filter_by(user_id=user_id)
+    def find_by_user(cls, user_id):
+        return cls.query.filter_by(user_id=user_id).all()
 
     def add(self):
         db.session.add(self)
