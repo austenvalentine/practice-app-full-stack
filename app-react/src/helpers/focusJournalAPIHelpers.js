@@ -1,13 +1,15 @@
-const practiceAppAPI = {
+const focusJournalAPI = {
   createSession: function(session) {
     const newSession = { ...session };
     newSession.created = new Date().getTime();
     newSession.modified = newSession.created;
     this.data.push(newSession);
-    console.log("data:", this.data);
   },
   getSessions: function() {
-    return this.data;
+    return this.data.reverse();
+  },
+  getSession: function(sessionId) {
+    return this.data[sessionId];
   },
   init: function() {
     const dummyData = [
@@ -28,5 +30,5 @@ const practiceAppAPI = {
   },
   data: []
 };
-practiceAppAPI.init();
-export { practiceAppAPI };
+focusJournalAPI.init();
+export { focusJournalAPI };

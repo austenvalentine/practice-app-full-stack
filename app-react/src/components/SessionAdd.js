@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { practiceAppAPI } from "../helpers/practiceJournalAPIHelpers";
+import { focusJournalAPI } from "../helpers/focusJournalAPIHelpers";
 
-function SessionAdd() {
+function SessionAdd({ updateSessions }) {
   const [focus, setFocus] = useState("");
   const [win, setWin] = useState("");
   const [challenge, setChallenge] = useState("");
@@ -16,7 +16,8 @@ function SessionAdd() {
 
   function handleClick(e) {
     e.preventDefault();
-    practiceAppAPI.createSession({ focus, win, challenge, nextStep });
+    focusJournalAPI.createSession({ focus, win, challenge, nextStep });
+    updateSessions();
     clearForm();
   }
 
