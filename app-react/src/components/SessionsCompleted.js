@@ -3,7 +3,7 @@ import { focusJournalAPI } from "../helpers/focusJournalAPIHelpers";
 import SessionsList from "./SessionsList";
 import SessionDetail from "./SessionDetail";
 
-function SessionsCompleted({ sessions }) {
+function SessionsCompleted({ sessions, updateSession }) {
   const [session, setSession] = useState(null);
 
   function showSession(e, sessionId) {
@@ -19,18 +19,19 @@ function SessionsCompleted({ sessions }) {
 
   return (
     <div>
-      {session == null ? (
+      {session == null && (
         <SessionsList
           sessions={sessions}
           showSession={showSession}
         ></SessionsList>
-      ) : null}
-      {session ? (
+      )}
+      {session && (
         <SessionDetail
           closeSession={closeSession}
           session={session}
+          updateSession={updateSession}
         ></SessionDetail>
-      ) : null}
+      )}
     </div>
   );
 }

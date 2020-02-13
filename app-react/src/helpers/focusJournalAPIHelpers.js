@@ -1,12 +1,15 @@
 const focusJournalAPI = {
   createSession: function(session) {
     const newSession = { ...session };
+    newSession.id = this.data.length;
     newSession.created = new Date().getTime();
     newSession.modified = newSession.created;
-    this.data.push(newSession);
+    const newData = [...this.data, newSession];
+    this.data = newData;
   },
   getSessions: function() {
-    return this.data.reverse();
+    const dataCopy = [...this.data];
+    return dataCopy;
   },
   getSession: function(sessionId) {
     return this.data[sessionId];
@@ -15,9 +18,9 @@ const focusJournalAPI = {
     const dummyData = [
       {
         focus: "Play Stairway slowly",
-        win: "played really slowly",
+        win: "played slowly",
         challenge: "could've been slower",
-        nextStep: "use the metronome"
+        nextStep: "slow down"
       },
       {
         focus: "swinging",

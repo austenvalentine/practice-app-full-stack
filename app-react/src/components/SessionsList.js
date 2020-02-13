@@ -16,15 +16,14 @@ function SessionsList(props) {
     <div className={sessions.length}>
       <h2>Completed Sessions</h2>
       <ul>
-        {sessions
-          ? sessions.map((session, index) => (
-              <li key={index}>
-                <button onClick={e => showSession(e, index)}>{`${new Date(
-                  session.created
-                ).toDateString()}: ${session.focus}`}</button>
-              </li>
-            ))
-          : null}
+        {sessions &&
+          [...sessions].reverse().map((session, index) => (
+            <li key={index}>
+              <button onClick={e => showSession(e, index)}>{`${new Date(
+                session.created
+              ).toDateString()}: ${session.focus}`}</button>
+            </li>
+          ))}
       </ul>
     </div>
   );

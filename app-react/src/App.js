@@ -5,7 +5,10 @@ import { focusJournalAPI } from "./helpers/focusJournalAPIHelpers";
 import "./App.css";
 
 function App() {
+  const CREATE = "CREATE";
+  const LIST = "LIST";
   const [sessions, setSessions] = useState([]);
+  const [journalMode, setJournalMode] = useState(CREATE);
 
   useEffect(function() {
     const newSessions = focusJournalAPI.getSessions();
@@ -15,14 +18,34 @@ function App() {
   function updateSessions() {
     const newSessions = focusJournalAPI.getSessions();
     setSessions(newSessions);
-    console.log("added new session", newSessions);
+  }
+
+  function updateSession(updatedSession, sessionId) {
+    console.log(updatedSession);
   }
 
   return (
     <div className="App">
       <h1>Focus Journal</h1>
-      <SessionAdd updateSessions={updateSessions}></SessionAdd>
-      <SessionsCompleted sessions={sessions}></SessionsCompleted>
+      {journalMode === CREATE && (
+        <div>
+          <button onClick={() => setJournalMode(LIST)}>
+            View Completed Journals
+          </button>
+          <SessionAdd updateSessions={updateSessions}></SessionAdd>
+        </div>
+      )}
+      {journalMode === LIST && (
+        <div>
+          <button onClick={() => setJournalMode(CREATE)}>
+            Log a New Session
+          </button>
+          <SessionsCompleted
+            sessions={sessions}
+            updateSession={updateSession}
+          ></SessionsCompleted>
+        </div>
+      )}
     </div>
   );
 }
