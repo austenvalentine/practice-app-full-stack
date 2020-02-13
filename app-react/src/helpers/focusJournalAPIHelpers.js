@@ -27,6 +27,12 @@ const focusJournalAPI = {
         win: "swung",
         challenge: "meaning a thing",
         nextStep: "swing harder"
+      },
+      {
+        focus: "shredding",
+        win: "shredded",
+        challenge: "shredding too slowly",
+        nextStep: "shred faster"
       }
     ];
     dummyData.forEach(session => this.createSession(session));

@@ -12,7 +12,16 @@ function SessionDetail(props) {
   const [newChallenge, setNewChallenge] = useState(session?.challenge);
   const [newNextStep, setNewNextStep] = useState(session?.nextStep);
 
-  function handleUpdateClick() {}
+  function handleUpdateClick() {
+    const newSession = {
+      // will this store stale values? Might need to pass values in
+      focus: newFocus,
+      win: newWin,
+      challenge: newChallenge,
+      nextStep: newNextStep
+    };
+    updateSession(newSession, session.id);
+  }
 
   return (
     <div>

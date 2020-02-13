@@ -19,7 +19,7 @@ function SessionsList(props) {
         {sessions &&
           [...sessions].reverse().map((session, index) => (
             <li key={index}>
-              <button onClick={e => showSession(e, index)}>{`${new Date(
+              <button onClick={e => showSession(e, session.id)}>{`${new Date(
                 session.created
               ).toDateString()}: ${session.focus}`}</button>
             </li>

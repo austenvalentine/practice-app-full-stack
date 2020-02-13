@@ -5,12 +5,18 @@ import { focusJournalAPI } from "./helpers/focusJournalAPIHelpers";
 import "./App.css";
 
 function App() {
+  // ===================
+  // UI state constants
+  // ===================
   const CREATE = "CREATE";
   const LIST = "LIST";
-  const [sessions, setSessions] = useState([]);
   const [journalMode, setJournalMode] = useState(CREATE);
+  //====================
+
+  const [sessions, setSessions] = useState([]);
 
   useEffect(function() {
+    // this fetching might need to be enclosed in an async function for the real API
     const newSessions = focusJournalAPI.getSessions();
     setSessions(newSessions);
   }, []);
