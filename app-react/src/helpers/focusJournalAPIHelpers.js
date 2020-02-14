@@ -11,7 +11,7 @@ const focusJournalAPI = {
   updateSession: function(newSession) {
     return new Promise(resolve => {
       const newData = this.data.map(function(session) {
-        if (session.id === newSession.id) {
+        if (session !== null && session.id === newSession.id) {
           newSession.created = session.created;
           newSession.modified = new Date().getTime();
           return newSession;
@@ -37,7 +37,7 @@ const focusJournalAPI = {
   deleteSession: function(sessionId) {
     return new Promise(resolve => {
       const newData = this.data.map(function(session) {
-        if (sessionId === session.id) {
+        if (session !== null && sessionId === session.id) {
           return null;
         }
         return session;

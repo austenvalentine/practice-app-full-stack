@@ -14,7 +14,9 @@ function SessionsCompleted({ sessions, updateSession, deleteSession }) {
   }
 
   function closeSession(e) {
-    setSession(null);
+    if (session !== null) {
+      setSession(null);
+    }
   }
 
   return (
