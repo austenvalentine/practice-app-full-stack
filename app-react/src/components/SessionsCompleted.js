@@ -3,17 +3,17 @@ import { focusJournalAPI } from "../helpers/focusJournalAPIHelpers";
 import SessionsList from "./SessionsList";
 import SessionDetail from "./SessionDetail";
 
-function SessionsCompleted({ sessions, updateSession }) {
+function SessionsCompleted({ sessions, updateSession, deleteSession }) {
   const [session, setSession] = useState(null);
 
   function showSession(e, sessionId) {
-    e.preventDefault();
-    const pickSession = focusJournalAPI.getSession(sessionId);
-    setSession(pickSession);
+    (async () => {
+      const pickSession = await focusJournalAPI.getSession(sessionId);
+      setSession(pickSession);
+    })();
   }
 
   function closeSession(e) {
-    e.preventDefault();
     setSession(null);
   }
 
@@ -30,6 +30,7 @@ function SessionsCompleted({ sessions, updateSession }) {
           closeSession={closeSession}
           session={session}
           updateSession={updateSession}
+          deleteSession={deleteSession}
         ></SessionDetail>
       )}
     </div>

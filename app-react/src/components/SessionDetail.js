@@ -1,26 +1,44 @@
 import React, { useState } from "react";
+import { focusJournalAPI } from "../helpers/focusJournalAPIHelpers";
 
 function SessionDetail(props) {
+  // ==================
+  // UI state constants
+  // ==================
   // detail modes are READ, EDIT and DELETE
   const READ = "READ";
   const EDIT = "EDIT";
   const DELETE = "DELETE";
   const [detailMode, setDetailMode] = useState(READ);
-  const { session, closeSession, updateSession /*, deleteSession */ } = props;
-  const [newFocus, setNewFocus] = useState(session?.focus);
-  const [newWin, setNewWin] = useState(session?.win);
-  const [newChallenge, setNewChallenge] = useState(session?.challenge);
-  const [newNextStep, setNewNextStep] = useState(session?.nextStep);
 
-  function handleUpdateClick() {
+  const { closeSession, updateSession, deleteSession } = props;
+  const [session, setSession] = useState(props.session);
+  const [newFocus, setNewFocus] = useState(session && session.focus);
+  const [newWin, setNewWin] = useState(session && session.win);
+  const [newChallenge, setNewChallenge] = useState(session?.challenge);
+  const [newNextStep, setNewNextStep] = useState(session && session.nextStep);
+
+  function handleClickSave() {
     const newSession = {
-      // will this store stale values? Might need to pass values in
+      // will this assign stale values? Might need to pass values in
+      id: session.id,
       focus: newFocus,
       win: newWin,
       challenge: newChallenge,
       nextStep: newNextStep
     };
-    updateSession(newSession, session.id);
+    (async () => {
+      await updateSession(newSession);
+      setSession(await focusJournalAPI.getSession(newSession.id));
+      setDetailMode(READ);
+    })();
+  }
+
+  function handleClickDelete() {
+    (async () => {
+      await deleteSession(session.id);
+      closeSession();
+    })();
   }
 
   return (
@@ -68,16 +86,16 @@ function SessionDetail(props) {
             onChange={e => setNewNextStep(e.target.value)}
           ></input>
           <button onClick={() => setDetailMode(READ)}>Cancel</button>
-          <button>Save Changes</button>
+          <button onClick={handleClickSave}>Save Changes</button>
         </div>
       )}
-      {detailMode === "DELETE" && (
-        <div htmlClass="deleteMode">
-          <div htmlClass="warningBox">
+      {detailMode === DELETE && (
+        <div className="deleteMode">
+          <div className="warningBox">
             <h2>Do you want to delete this session?</h2>
           </div>
           <button onClick={() => setDetailMode(READ)}>No</button>
-          <button onClick={handleUpdateClick}>Yes</button>
+          <button onClick={handleClickDelete}>Yes</button>
         </div>
       )}
     </div>

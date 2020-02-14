@@ -17,17 +17,35 @@ function App() {
 
   useEffect(function() {
     // this fetching might need to be enclosed in an async function for the real API
-    const newSessions = focusJournalAPI.getSessions();
-    setSessions(newSessions);
+    (async () => {
+      const newSessions = await focusJournalAPI.getSessions();
+      setSessions(newSessions);
+    })();
   }, []);
 
   function updateSessions() {
-    const newSessions = focusJournalAPI.getSessions();
-    setSessions(newSessions);
+    (async () => {
+      const newSessions = await focusJournalAPI.getSessions();
+      setSessions(newSessions);
+    })();
   }
 
-  function updateSession(updatedSession, sessionId) {
-    console.log(updatedSession);
+  function updateSession(updatedSession) {
+    // this fetching might need to be enclosed in an async function for the real API
+    (async () => {
+      await focusJournalAPI.updateSession(updatedSession);
+      const newSessions = await focusJournalAPI.getSessions();
+      setSessions(newSessions);
+    })();
+  }
+
+  function deleteSession(sessionId) {
+    (async () => {
+      const response = await focusJournalAPI.deleteSession(sessionId);
+      const newSessions = await focusJournalAPI.getSessions();
+      setSessions(newSessions);
+      return response;
+    })();
   }
 
   return (
@@ -49,6 +67,7 @@ function App() {
           <SessionsCompleted
             sessions={sessions}
             updateSession={updateSession}
+            deleteSession={deleteSession}
           ></SessionsCompleted>
         </div>
       )}

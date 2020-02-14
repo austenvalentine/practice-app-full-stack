@@ -7,12 +7,45 @@ const focusJournalAPI = {
     const newData = [...this.data, newSession];
     this.data = newData;
   },
+
+  updateSession: function(newSession) {
+    return new Promise(resolve => {
+      const newData = this.data.map(function(session) {
+        if (session.id === newSession.id) {
+          newSession.created = session.created;
+          newSession.modified = new Date().getTime();
+          return newSession;
+        }
+        return session;
+      });
+      this.data = newData;
+      resolve(200);
+    });
+  },
   getSessions: function() {
-    const dataCopy = [...this.data];
-    return dataCopy;
+    return new Promise(resolve => {
+      const dataCopy = this.data.filter(session => session !== null);
+      console.log(dataCopy);
+      resolve(dataCopy);
+    });
   },
   getSession: function(sessionId) {
-    return this.data[sessionId];
+    return new Promise(resolve => {
+      resolve(this.data[sessionId]);
+    });
+  },
+  deleteSession: function(sessionId) {
+    return new Promise(resolve => {
+      const newData = this.data.map(function(session) {
+        if (sessionId === session.id) {
+          return null;
+        }
+        return session;
+      });
+      console.log("deleted sessions: ", newData);
+      this.data = newData;
+      resolve(200);
+    });
   },
   init: function() {
     const dummyData = [
