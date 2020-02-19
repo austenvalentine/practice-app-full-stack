@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from flask import Flask
-import app_config
+from app_config import app_config
 from flask_restful import Api
 from resources.login import Login
 
