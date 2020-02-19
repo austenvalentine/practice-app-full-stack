@@ -1,4 +1,4 @@
-#!/mnt/c/Users/auste/Documents/coding/portfolio/practice-app-full-stack/backend/env/bin/python
+#!/mnt/c/Users/auste/Documents/coding/portfolio/practice-app-full-stack/app-flask/env/bin/python
 
 import sys
 import getopt

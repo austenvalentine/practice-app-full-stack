@@ -1,4 +1,4 @@
-#!/mnt/c/Users/auste/Documents/coding/portfolio/practice-app-full-stack/backend/env/bin/python3
+#!/mnt/c/Users/auste/Documents/coding/portfolio/practice-app-full-stack/app-flask/env/bin/python3
 # -*- coding: utf-8 -*-
 import re
 import sys
