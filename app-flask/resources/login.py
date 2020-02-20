@@ -14,4 +14,4 @@ class Login(Resource):
     if user.verify_password(args["password"]):
       user_token = create_access_token(identity=user.username)
       return {"access_token":user_token}, 200
-    return 401
+    return {"message": "invalid username or password"},401
