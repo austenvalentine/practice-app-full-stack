@@ -11,7 +11,7 @@ class UserModel():
   @classmethod
   def get_user_by_id(cls, _id):
     db = sqlite3.connect('data.sqlite3');
-    result = db.execute(f'SELECT * FROM user WHERE id="{_id}"')
+    result = db.execute(f'SELECT * FROM user WHERE id={_id}')
     requested_user = result.fetchone()
     db.close()
     return cls(
