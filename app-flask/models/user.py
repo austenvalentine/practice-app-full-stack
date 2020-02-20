@@ -1,4 +1,3 @@
-from flask import jsonify
 from werkzeug.security import safe_str_cmp
 import sqlite3
 
@@ -34,7 +33,8 @@ class UserModel():
     
   def verify_password(self, password):
     if (safe_str_cmp(password, self.password)):
-      return "Heyyyyyy! I'm in!"
+      return True
+    return False
 
 
   def json(self):

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from flask import Flask
+from flask_jwt_extended import JWTManager
 from app_config import app_config
 from flask_restful import Api
 from resources.login import Login
@@ -8,6 +9,7 @@ from resources.login import Login
 app = Flask(__name__)
 app.config["SECRET_KEY"] = app_config["secret_key"]
 api = Api(app)
+jwt = JWTManager(app)
 
 api.add_resource(Login, '/login')
 
