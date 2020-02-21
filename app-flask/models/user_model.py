@@ -22,7 +22,7 @@ class UserModel():
     )
 
   @classmethod
-  def get_by_username(cls, username):
+  def get_user_by_username(cls, username):
     db = sqlite3.connect('data.sqlite3')
     result = db.execute(f'SELECT * FROM user WHERE username="{username}"')
     requested_user = result.fetchone()

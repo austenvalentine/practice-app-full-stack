@@ -12,7 +12,7 @@ class Session(Resource):
     args = parser.parse_args()
     username = get_jwt_identity()
 
-    user = UserModel.get_by_username(username)
+    user = UserModel.get_user_by_username(username)
 
     session = SessionModel.get_session_by_id(args["session_id"], user.id)
     if session:
