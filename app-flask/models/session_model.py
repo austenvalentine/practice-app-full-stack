@@ -15,13 +15,14 @@ class SessionModel():
 
   @classmethod
   def get_session_by_id(cls, _id, user_id):
-    print(f">>>>>>>>>>>>>>>>>>user_id: { user_id };   session id: { _id }")
-
+    session_data = None
+    
     db = sqlite3.connect('data.sqlite3')
     result = db.execute(f"SELECT id, user_id, created, modified, focus, win, challenge, next_step FROM session WHERE id={_id} AND user_id='{user_id}'")
     session_data = result.fetchone()
-
     db.close()
+    
+
     if session_data:
       session = cls(
         *session_data
