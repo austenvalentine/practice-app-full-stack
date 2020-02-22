@@ -39,9 +39,19 @@ class SessionModel():
     db.close()
 
     if sessions_data:
-      return [cls(*session) for session in sessions_data]
+      return [cls(*session_data) for session_data in sessions_data]
     else:
       return None
+
+  @classmethod
+  def create_session(cls, user_id, focus, win, challenge, next_step):
+    created = datetime.now(timezone.utc).timestamp()
+    modified = created
+    db = sqlite3.connect('data.sqlite3')
+    db.execute(f"INSERT INTO session (user_id, created, modified, focus, win, challenge, next_step) VALUES (?, ?, ?, ?, ?, ?, ?)", (user_id, created, modified, focus, win, challenge, next_step))
+    db.commit()
+    db.close()
+
 
   def json(self):
     return ({
