@@ -22,10 +22,7 @@ class SessionModel():
     db.close()
 
     if session_data:
-      session = cls(
-        *session_data
-      )
-      return session
+      return cls(*session_data)
     else:
       return None
 
@@ -51,6 +48,10 @@ class SessionModel():
     db.execute(f"INSERT INTO session (user_id, created, modified, focus, win, challenge, next_step) VALUES (?, ?, ?, ?, ?, ?, ?)", (user_id, created, modified, focus, win, challenge, next_step))
     db.commit()
     db.close()
+
+  @classmethod
+  def update_session(cls):
+    pass
 
 
   def json(self):

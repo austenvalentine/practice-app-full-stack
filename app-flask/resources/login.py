@@ -12,6 +12,6 @@ class Login(Resource):
     args = parser.parse_args()
     user = UserModel.get_user_by_username(args["username"])
     if user.verify_password(args["password"]):
-      user_token = create_access_token(identity=user.username)
+      user_token = create_access_token(identity=user.id)
       return {"access_token":user_token}, 200
     return {"message": "invalid username or password"}, 401
