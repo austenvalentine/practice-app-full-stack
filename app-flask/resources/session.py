@@ -15,7 +15,7 @@ def parse_get_put_args(parser):
     "challenge", required=True, type=str, help="invalid challenge",
   )
   parser.add_argument(
-    "next_step", required=True, type=str, help="invalid next_step",
+    "next_step", required=True, type=str, help="invalid next step",
   )
   return parser.parse_args()
 
@@ -35,7 +35,6 @@ class Session(Resource):
   @jwt_required
   def post(self):
     user_id = get_jwt_identity()
-
     parser = reqparse.RequestParser()
     args = parse_get_put_args()
     SessionModel.create_session(
@@ -52,5 +51,12 @@ class Session(Resource):
     parser = reqparse.RequestParser()
     parser.add_argument('session_id', required=True, type=int, help="invalid session id")
     args = parse_get_put_args(parser)
-    return args
+    SessionModel.update_session(
+      session_id=args["session_id"],
+      user_id=user_id,
+      focus=args["focus"],
+      win=args["win"],
+      challenge=args["challenge"],
+      next_step=args["next_step"]
+    )
     

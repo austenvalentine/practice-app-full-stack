@@ -50,9 +50,14 @@ class SessionModel():
     db.close()
 
   @classmethod
-  def update_session(cls):
-    pass
-
+  def update_session(cls, session_id, user_id, focus, win, challenge, next_step):
+    session = SessionModel.get_session_by_id(session_id, user_id)
+    modified = datetime.now(timezone.utc).timestamp()
+    db = sqlite3.connect('data.sqlite3')
+    db.execute(f"UPDATE session SET modified=?, focus=?, win=?, challenge=?, next_step=? WHERE id={session_id} AND user_id={user_id}", (modified, focus, win, challenge, next_step))
+    db.commit()
+    db.close()
+    return SessionModel.get_session_by_id(session_id, user_id)
 
   def json(self):
     return ({
