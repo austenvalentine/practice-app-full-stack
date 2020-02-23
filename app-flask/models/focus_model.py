@@ -59,6 +59,13 @@ class FocusModel():
     db.close()
     return FocusModel.get_focus_session_by_id(focus_session_id, user_id)
 
+  @classmethod
+  def delete_focus_session(cls, focus_session_id, user_id):
+    db = sqlite3.connect('data.sqlite3')
+    db.execute(f"DELETE FROM focus_session WHERE id=? AND user_id=?", (focus_session_id, user_id))
+    db.commit()
+    db.close()
+
   def json(self):
     return ({
       "id": self.id,
