@@ -31,7 +31,7 @@ class FocusModel():
     focus_sessions = []
 
     db = sqlite3.connect('data.sqlite3')
-    results = db.execute(f"SELECT id, user_id, created, modified, focus, win, challenge, next_step FROM focus_session WHERE user_id={user_id} ORDER BY created DESC")
+    results = db.execute(f"SELECT id, user_id, created, modified, focus, win, challenge, next_step FROM focus_session WHERE user_id={user_id} ORDER BY created DESC, id DESC")
     focus_sessions_data = results.fetchall()
     db.close()
 

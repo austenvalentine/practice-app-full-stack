@@ -29,7 +29,6 @@ parser.add_argument(
   help="invalid next step",
 )
 
-
 class Focus(Resource):
   @jwt_required
   def get(self, focus_session_id):
