@@ -16,7 +16,7 @@ api = Api(app)
 jwt = JWTManager(app)
 
 api.add_resource(Login, '/login')
-api.add_resource(Focus, '/focus_session')
+api.add_resource(Focus, '/focus_session/<int:focus_session_id>', '/focus_session')
 api.add_resource(Focuss, '/focus_sessions')
 
 if __name__=="__main__":
