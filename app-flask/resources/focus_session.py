@@ -50,7 +50,7 @@ class Focus(Resource):
       challenge=args["challenge"],
       next_step=args["next_step"]
     )
-    return {"message":"focus session successfully added"}
+    return {"message":"focus session successfully added"}, 200
 
   @jwt_required
   def put(self, focus_session_id):
@@ -64,7 +64,7 @@ class Focus(Resource):
       challenge=args["challenge"],
       next_step=args["next_step"]
     )
-    return {"message":"focus session successfully updated"}
+    return {"message":"focus session successfully updated"}, 200
     
   @jwt_required
   def delete(self, focus_session_id):
