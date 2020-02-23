@@ -17,7 +17,7 @@ users = [
   }
 ]
 
-sessions = [
+focus_sessions = [
   { "user_id" : 1,
     "created" : timestamp - 500000,
     "modified" : timestamp - 400000,
@@ -57,15 +57,15 @@ sessions = [
 db = sqlite3.connect('data.sqlite3')
 db.execute("CREATE TABLE user (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, email TEXT, password TEXT,CONSTRAINT unique_username UNIQUE (username))")
 
-db.execute("CREATE TABLE session (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, created REAL, modified REAL, focus TEXT, win TEXT, challenge TEXT, next_step TEXT)")
+db.execute("CREATE TABLE focus_session (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, created REAL, modified REAL, focus TEXT, win TEXT, challenge TEXT, next_step TEXT)")
 
 for user in users:
   db.execute("INSERT INTO user (username, email, password) VALUES (?, ?, ?)",
   (user["username"], user["email"], user["password"]))
 
-for session in sessions:
-  db.execute("INSERT INTO session (user_id, created, modified, focus, win, challenge, next_step) VALUES (?, ?, ?, ?, ?, ?, ?)",
-  (session["user_id"], session["created"], session["modified"], session["focus"], session["win"], session["challenge"], session["next_step"]))
+for focus_session in focus_sessions:
+  db.execute("INSERT INTO focus_session (user_id, created, modified, focus, win, challenge, next_step) VALUES (?, ?, ?, ?, ?, ?, ?)",
+  (focus_session["user_id"], focus_session["created"], focus_session["modified"], focus_session["focus"], focus_session["win"], focus_session["challenge"], focus_session["next_step"]))
 
 db.commit()
 db.close()

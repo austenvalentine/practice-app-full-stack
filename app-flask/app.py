@@ -5,8 +5,8 @@ from flask_jwt_extended import JWTManager
 from app_config import app_config
 from flask_restful import Api
 from resources.login import Login
-from resources.session import Session
-from resources.sessions import Sessions
+from resources.focus_session import Focus
+from resources.focus_sessions import Focuss
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = app_config["secret_key"]
@@ -16,8 +16,8 @@ api = Api(app)
 jwt = JWTManager(app)
 
 api.add_resource(Login, '/login')
-api.add_resource(Session, '/session')
-api.add_resource(Sessions, '/sessions')
+api.add_resource(Focus, '/focus_session')
+api.add_resource(Focuss, '/focus_sessions')
 
 if __name__=="__main__":
   print(app.config["SECRET_KEY"])
