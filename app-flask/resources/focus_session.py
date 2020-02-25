@@ -42,20 +42,27 @@ class Focus(Resource):
   def post(self):
     user_id = get_jwt_identity()
     args = parser.parse_args()
-    FocusModel.create_focus_session(
+    result = FocusModel.create_focus_session(
       user_id=user_id,
       focus=args["focus"],
       win=args["win"],
       challenge=args["challenge"],
       next_step=args["next_step"]
     )
-    return {"message":"focus session successfully added"}, 200
+
+    if result:
+      return {"message" : "focus session successfully added"}, 200
+    else: 
+      return {"message" : "input data failed database check"}, 400
 
   @jwt_required
   def put(self, focus_session_id):
     user_id = get_jwt_identity()
     args = parser.parse_args()
-    FocusModel.update_focus_session(
+    # check that the focus session exists
+    if not FocusModel.get_focus_session_by_id(focus_session_id, user_id):
+      return {"message": "invalid focus session id"}, 400
+    result = FocusModel.update_focus_session(
       focus_session_id=focus_session_id,
       user_id=user_id,
       focus=args["focus"],
@@ -63,10 +70,16 @@ class Focus(Resource):
       challenge=args["challenge"],
       next_step=args["next_step"]
     )
-    return {"message":"focus session successfully updated"}, 200
+    if result:
+      return {"message":"focus session successfully updated"}, 200
+    else: 
+      return {"message" : "input data failed database check"}, 400
     
   @jwt_required
   def delete(self, focus_session_id):
     user_id = get_jwt_identity()
+    # check that the focus session exists
+    if not FocusModel.get_focus_session_by_id(focus_session_id, user_id):
+      return {"message": "invalid focus session id"}, 400
     FocusModel.delete_focus_session(focus_session_id, user_id)
     return {"message":"focus session successfully deleted"}

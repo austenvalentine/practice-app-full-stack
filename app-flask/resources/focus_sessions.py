@@ -2,7 +2,7 @@ from flask_restful import Resource
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from models.focus_model import FocusModel
 
-class Focuss(Resource):
+class FocusSessions(Resource):
   @jwt_required
   def get(self):
     user_id = get_jwt_identity()

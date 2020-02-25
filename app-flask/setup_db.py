@@ -55,9 +55,39 @@ focus_sessions = [
 ]
 
 db = sqlite3.connect('data.sqlite3')
-db.execute("CREATE TABLE user (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, email TEXT, password TEXT,CONSTRAINT unique_username UNIQUE (username))")
+db.execute("""
+  CREATE TABLE user (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT,
+    email TEXT,
+    password TEXT,
+    CONSTRAINT unique_username UNIQUE (username),
+    CHECK(
+      length(username) < 32 AND
+      length(email) < 32 AND
+      length(password) < 100
+    )
+  )
+""")
 
-db.execute("CREATE TABLE focus_session (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, created REAL, modified REAL, focus TEXT, win TEXT, challenge TEXT, next_step TEXT)")
+db.execute("""
+  CREATE TABLE focus_session (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER,
+    created REAL,
+    modified REAL,
+    focus TEXT,
+    win TEXT,
+    challenge TEXT,
+    next_step TEXT
+  CHECK(
+    length(focus) < 70 AND
+    length(win) < 70 AND
+    length(challenge) < 70 AND
+    length(next_step) < 70
+  )
+)
+""")
 
 for user in users:
   db.execute("INSERT INTO user (username, email, password) VALUES (?, ?, ?)",
