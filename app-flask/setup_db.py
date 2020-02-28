@@ -74,8 +74,8 @@ db.execute("""
   CREATE TABLE focus_session (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER,
-    created REAL,
-    modified REAL,
+    created INTEGER,
+    modified INTEGER,
     focus TEXT,
     win TEXT,
     challenge TEXT,
@@ -94,8 +94,8 @@ for user in users:
   (user["username"], user["email"], user["password"]))
 
 for focus_session in focus_sessions:
-  db.execute("INSERT INTO focus_session (user_id, created, modified, focus, win, challenge, next_step) VALUES (?, ?, ?, ?, ?, ?, ?)",
-  (focus_session["user_id"], focus_session["created"], focus_session["modified"], focus_session["focus"], focus_session["win"], focus_session["challenge"], focus_session["next_step"]))
+  db.execute("INSERT INTO focus_session (user_id, created, modified, focus, win, challenge, next_step) VALUES (?, strftime('%s', 'now'), strftime('%s', 'now'), ?, ?, ?, ?)",
+  (focus_session["user_id"], focus_session["focus"], focus_session["win"], focus_session["challenge"], focus_session["next_step"]))
 
 db.commit()
 db.close()

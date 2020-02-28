@@ -42,11 +42,9 @@ class FocusModel():
 
   @classmethod
   def create_focus_session(cls, user_id, focus, win, challenge, next_step):
-    created = datetime.now(timezone.utc).timestamp()
-    modified = created
     try:
       db = sqlite3.connect('data.sqlite3')
-      db.execute(f"INSERT INTO focus_session (user_id, created, modified, focus, win, challenge, next_step) VALUES (?, ?, ?, ?, ?, ?, ?)", (user_id, created, modified, focus, win, challenge, next_step))
+      db.execute(f"INSERT INTO focus_session (user_id, created, modified, focus, win, challenge, next_step) VALUES (?, strftime('%s', 'now'), strftime('%s', 'now'), ?, ?, ?, ?)", (user_id, focus, win, challenge, next_step))
       db.commit()
       db.close()
     except sqlite3.IntegrityError:
@@ -58,16 +56,15 @@ class FocusModel():
   @classmethod
   def update_focus_session(cls, focus_session_id, user_id, focus, win, challenge, next_step):
     focus_session = FocusModel.get_focus_session_by_id(focus_session_id, user_id)
-    modified = datetime.now(timezone.utc).timestamp()
     if not cls.get_focus_session_by_id(focus_session_id, user_id):
       return False
     try:
       db = sqlite3.connect('data.sqlite3')
-      db.execute(f"UPDATE focus_session SET modified=?, focus=?, win=?, challenge=?, next_step=? WHERE id={focus_session_id} AND user_id={user_id}", (modified, focus, win, challenge, next_step))
+      db.execute(f"UPDATE focus_session SET modified=strftime('%s', 'now'), focus=?, win=?, challenge=?, next_step=? WHERE id={focus_session_id} AND user_id={user_id}", (focus, win, challenge, next_step))
       db.commit()
       db.close()
       return FocusModel.get_focus_session_by_id(focus_session_id, user_id)
-    except sqlite.IntegrityError:
+    except sqlite3.IntegrityError:
       return False
 
   @classmethod
