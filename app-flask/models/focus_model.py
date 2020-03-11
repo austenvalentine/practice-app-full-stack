@@ -17,7 +17,7 @@ class FocusModel():
     focus_session_data = None
     
     db = sqlite3.connect('data.sqlite3')
-    result = db.execute(f"SELECT id, user_id, created, modified, focus, win, challenge, next_step FROM focus_session WHERE id={_id} AND user_id={user_id}")
+    result = db.execute("SELECT id, user_id, created, modified, focus, win, challenge, next_step FROM focus_session WHERE id=? AND user_id=?", (_id, user_id))
     focus_session_data = result.fetchone()
     db.close()
 
@@ -60,7 +60,7 @@ class FocusModel():
       return False
     try:
       db = sqlite3.connect('data.sqlite3')
-      db.execute(f"UPDATE focus_session SET modified=strftime('%s', 'now'), focus=?, win=?, challenge=?, next_step=? WHERE id={focus_session_id} AND user_id={user_id}", (focus, win, challenge, next_step))
+      db.execute(f"UPDATE focus_session SET modified=strftime('%s', 'now'), focus=?, win=?, challenge=?, next_step=? WHERE id=? AND user_id=?", (focus, win, challenge, next_step, focus_session_id, user_id))
       db.commit()
       db.close()
       return FocusModel.get_focus_session_by_id(focus_session_id, user_id)
@@ -70,7 +70,7 @@ class FocusModel():
   @classmethod
   def delete_focus_session(cls, focus_session_id, user_id):
     db = sqlite3.connect('data.sqlite3')
-    db.execute(f"DELETE FROM focus_session WHERE id=? AND user_id=?", (focus_session_id, user_id))
+    db.execute("DELETE FROM focus_session WHERE id=? AND user_id=?", (focus_session_id, user_id))
     db.commit()
     db.close()
 
