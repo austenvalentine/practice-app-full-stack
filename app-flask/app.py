@@ -7,6 +7,7 @@ from flask_restful import Api
 from resources.login import Login
 from resources.focus_session import Focus
 from resources.focus_sessions import FocusSessions
+from resources.register import Register
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = app_config["secret_key"]
@@ -18,6 +19,7 @@ jwt = JWTManager(app)
 api.add_resource(Login, '/login')
 api.add_resource(Focus, '/focus_session/<int:focus_session_id>', '/focus_session')
 api.add_resource(FocusSessions, '/focus_sessions')
+api.add_resource(Register, '/register')
 
 if __name__=="__main__":
   print(app.config["SECRET_KEY"])
