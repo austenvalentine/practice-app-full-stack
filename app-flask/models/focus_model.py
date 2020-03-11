@@ -31,7 +31,7 @@ class FocusModel():
     focus_sessions = []
 
     db = sqlite3.connect('data.sqlite3')
-    results = db.execute(f"SELECT id, user_id, created, modified, focus, win, challenge, next_step FROM focus_session WHERE user_id={user_id} ORDER BY created DESC, id DESC")
+    results = db.execute("SELECT id, user_id, created, modified, focus, win, challenge, next_step FROM focus_session WHERE user_id=? ORDER BY created DESC, id DESC", (str(user_id)))
     focus_sessions_data = results.fetchall()
     db.close()
 
@@ -44,7 +44,7 @@ class FocusModel():
   def create_focus_session(cls, user_id, focus, win, challenge, next_step):
     try:
       db = sqlite3.connect('data.sqlite3')
-      db.execute(f"INSERT INTO focus_session (user_id, created, modified, focus, win, challenge, next_step) VALUES (?, strftime('%s', 'now'), strftime('%s', 'now'), ?, ?, ?, ?)", (user_id, focus, win, challenge, next_step))
+      db.execute("INSERT INTO focus_session (user_id, created, modified, focus, win, challenge, next_step) VALUES (?, strftime('%s', 'now'), strftime('%s', 'now'), ?, ?, ?, ?)", (user_id, focus, win, challenge, next_step))
       db.commit()
       db.close()
     except sqlite3.IntegrityError:
