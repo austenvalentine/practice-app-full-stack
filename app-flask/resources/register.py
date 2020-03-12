@@ -9,9 +9,16 @@ parser.add_argument("password", type=str, required=True, help="password is requi
 
 class Register(Resource):
   def post(self):
+    ## lots of validation ahead
     args = parser.parse_args()
-    password = args["password"].lower()
-    if UserModel.user_exists(args["username"], args["email"]):
+    username = args["username"]
+    email = args["email"]
+    password = args["password"]
+
+    if len(username) < 5:
+      return {"message": "username must be at least 5 characters"}
+
+    if UserModel.user_exists(username, email):
       return {"message":"user exists"}, 400
 
     if validate_email(email, verify=True):
@@ -25,7 +32,7 @@ class Register(Resource):
     acc = {}
     for ch in args["password"]:
       if acc.get[ch, None]:
-        acc[ch]++
+        acc[ch] = acc[ch] + 1
       else: 
         acc[ch] = 0
       
