@@ -1,15 +1,15 @@
 from smtplib import SMTP_SSL
 from secrets import token_urlsafe
-from app_config import app_config
+from private_config import private_config
 
 def send_verify_email(recipient_email, recipient_name):
-  username = app_config["smtp_username"]
-  password = app_config["smtp_password"]
-  server = app_config["smtp_server"]
-  verify_uri = app_config["verify_uri"]
-  ssl = app_config["smtp_ssl"]
-  sender_email = app_config["smtp_sender_email"]
-  sender_name = app_config["smtp_sender_name"]
+  username = private_config["smtp_username"]
+  password = private_config["smtp_password"]
+  server = private_config["smtp_server"]
+  verify_uri = private_config["verify_uri"]
+  ssl = private_config["smtp_ssl"]
+  sender_email = private_config["smtp_sender_email"]
+  sender_name = private_config["smtp_sender_name"]
   connection = SMTP_SSL(server, ssl)
   connection.login(username, password)
 
@@ -25,7 +25,7 @@ Content-Type: text/plain; charset="UTF-8"
 
 Hello {recipient_name},
 
-Please follow the URL and log in to complete your registration.
+Please visit the URL and log in to complete your registration.
 
 {verify_uri}?token={token}
 

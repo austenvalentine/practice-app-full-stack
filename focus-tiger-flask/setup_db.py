@@ -58,10 +58,13 @@ db = sqlite3.connect('data.sqlite3')
 db.execute("""
   CREATE TABLE user (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
+    active INTEGER NOT NULL,
     username TEXT NOT NULL UNIQUE,
     email TEXT NOT NULL UNIQUE,
     password TEXT,
     CHECK(
+      active >= 0 AND
+      active <=1 AND
       length(username) < 32 AND
       length(email) < 32 AND
       length(password) < 100

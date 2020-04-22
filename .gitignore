@@ -1,6 +1,8 @@
-data.db
-data.sqlite3
-app_config.py
+*.db
+*.sqlite3
+*.csv
+*.sql
+private_config.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

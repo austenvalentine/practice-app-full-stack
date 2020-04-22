@@ -1,6 +1,7 @@
+from models.registrant_model import RegistrantModel
 from models.user_model import UserModel
 from flask_restful import Resource, reqparse
-from helpers.email_helper import verify_email
+from helpers.email_helper import send_verify_email
 
 parser = reqparse.RequestParser()
 parser.add_argument("username", type=str, required=True, help="username is required" )
@@ -14,11 +15,12 @@ class Register(Resource):
     email = args["email"]
     password = args["password"]
 
+    registrant = RegistrantModel(username=username, email=email, password=password)
     ## validation
     if len(username) < 5:
       return {"message": "username must be at least 5 characters"}
 
-    elif UserModel.user_exists(username, email):
+    elif UserModel(username=username).exists() or UserModel(email=email).exists():
       return {"message":"user exists"}, 400
 
     elif len(args["password"]) < 10:
@@ -33,13 +35,20 @@ class Register(Resource):
       
     if len(acc.keys()) < 6:
       return {"message" : "password must contain at least 6 different symbols"}, 400
+
     
     # validate email structure before verification
     # if is_valid(email):
 
-    send_verify_email(email, username)
+    token = send_verify_email(email, username)
 
-    # UserModel.add_user(username, email, password)
+    ## add registrant to registrant table
+    RegistrantModel(
+      username=username,
+      email=email,
+      password=password,
+      token=token
+    ).add_registrant()
 
     return {"message": "please verify email"}, 200
     
