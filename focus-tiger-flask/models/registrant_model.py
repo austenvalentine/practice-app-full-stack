@@ -85,7 +85,7 @@ class RegistrantModel():
 
   # user methods
 
-  def add_registrant(self):
+  def add(self):
     response = None
     if (self.exists()):
       self.__dbdelete("DELETE FROM registrant WHERE email=%s", [self.email])
@@ -115,12 +115,18 @@ class RegistrantModel():
     return None
 
   def get_by_token(self):
-    requested_registrant = self.__dbfetchone("""SELECT id, username, email, passhash, token FROM registrant WHERE token=%s""",[self.token])
+    requested_registrant = self.__dbfetchone(
+      """SELECT id, username, email, passhash, token FROM registrant WHERE token=%s""",
+      [self.token])
     if requested_registrant:
       self.id = requested_registrant[0]
       self.username = requested_registrant[1]
       self.email = requested_registrant[2]
       self.passhash = requested_registrant[3]
+      return self
+
+  def delete(self):
+    self.__dbdelete("DELETE FROM registrant WHERE email=%s", [self.email])
     
   def verify_password(self, password):
     password_hash = generate_password_hash(password)

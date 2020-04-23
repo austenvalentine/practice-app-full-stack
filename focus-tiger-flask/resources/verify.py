@@ -1,17 +1,23 @@
 from flask_restful import Resource, reqparse
+from models.registrant_model import RegistrantModel
+from models.user_model import UserModel
 
 parser = reqparse.RequestParser()
 parser.add_argument("token", type=str, required=True, help="missing token")
 
 class Verify(Resource):
   def get(self):
-
-    # lookup token in registrant table
-    # copy username, email, encrypted password
-    # add new user
     args = parser.parse_args()
     token = args["token"]
-    return {
-      "message": "email verified",
-      "token" : token
-    }
+    registrant = RegistrantModel(token=token).get_by_token()
+    if registrant:
+      user = UserModel(
+        username=registrant.username,
+        email=registrant.email,
+        passhash=registrant.passhash
+      ).add()
+      registrant.delete()
+      return {
+        "message": "email verified",
+      }
+

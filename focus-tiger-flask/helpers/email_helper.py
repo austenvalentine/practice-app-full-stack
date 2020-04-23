@@ -34,5 +34,5 @@ Thank you,
 {sender_name}
   """
   connection.sendmail(from_addr=sender_email, to_addrs=recipient_email, msg=message)
-
+  print("email sent to ", recipient_email)
   return token

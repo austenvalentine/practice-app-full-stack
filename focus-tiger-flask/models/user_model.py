@@ -61,12 +61,12 @@ class UserModel():
 
   # user methods
 
-  def add_user(self):
+  def add(self):
     response = None
     if (self.exists()):
       return false
     response = self.__dbinsert(
-      "INSERT INTO user (username, email, passhash) VALUES (%s,%s,%s)",
+      "INSERT INTO focus_user (username, email, passhash) VALUES (%s,%s,%s)",
       (self.username, self.email, self.passhash)
     )
     if response:

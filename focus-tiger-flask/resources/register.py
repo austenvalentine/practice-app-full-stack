@@ -48,7 +48,7 @@ class Register(Resource):
       email=email,
       password=password,
       token=token
-    ).add_registrant()
+    ).add()
 
     return {"message": "please verify email"}, 200
     
