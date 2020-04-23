@@ -1,8 +1,9 @@
-import sqlite3
+import psycopg2
+from private_config import connection_args
 from datetime import datetime, timezone
 
 class FocusModel():
-  def __init__(self, _id, user_id, created, modified, focus, win, challenge, next_step):
+  def __init__(self, _id=None, user_id=None, created=None, modified=None, focus=None, win=None, challenge=None, next_step=None):
     self.id = _id
     self.user_id = user_id
     self.created = created
@@ -12,8 +13,26 @@ class FocusModel():
     self.challenge = challenge
     self.next_step = next_step
 
-  @classmethod
-  def get_focus_session_by_id(cls, _id, user_id):
+
+  # database methods
+
+  def __dbfetchone(self, query, query_values, exception_callback=None):
+    try:
+      connection = psycopg2.connect(**connection_args)
+      cursor = connection.cursor()
+      cursor.execute(query, query_values)
+      cursor.fetchone()
+      connection.close()
+    except:
+      if exception_callback:
+        exception_callback()
+      else:
+        print("FocusModel.__dbfetchone: FAILED FETCHONE")
+      return None
+
+  # focus session methods
+
+  def get_by_id(cls, _id, user_id):
     focus_session_data = None
     
     db = sqlite3.connect('data.sqlite3')

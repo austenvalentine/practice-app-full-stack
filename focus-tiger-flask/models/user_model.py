@@ -1,18 +1,10 @@
-from werkzeug.security import safe_str_cmp, generate_password_hash
+from werkzeug.security import safe_str_cmp, generate_password_hash, check_password_hash
 from flask_restful import reqparse
-from private_config import private_config
+from private_config import private_config, connection_args
 import psycopg2
 
 
 class UserModel():
-  connection_args = {
-    "dbname":   private_config["pg_dbname"],
-    "user":     private_config["pg_user"],
-    "password": private_config["pg_password"],
-    "host":     private_config["pg_host"],
-    "port":     private_config["pg_port"]
-  }
-
   def __init__(self, username=None, email=None, passhash=None, _id=None):
     self.id = _id
     self.passhash = passhash
@@ -30,7 +22,7 @@ class UserModel():
 
   def __dbinsert(self, query, query_values=None, exception_callback=None):
     try:
-      connection = psycopg2.connect(**UserModel.connection_args)
+      connection = psycopg2.connect(**connection_args)
       cursor = connection.cursor()
       cursor.execute(query, query_values)
       connection.commit()
@@ -45,7 +37,7 @@ class UserModel():
 
   def __dbfetchone(self, query, query_values=None, exception_callback=None):
     try:
-      connection = psycopg2.connect(**UserModel.connection_args)
+      connection = psycopg2.connect(**connection_args)
       cursor = connection.cursor()
       cursor.execute(query, query_values)
       result = cursor.fetchone()
@@ -107,9 +99,8 @@ class UserModel():
       return self
     return None
     
-  def verify_password(self):
-    password_hash = generate_password_hash(password)
-    if (safe_str_cmp(password_hash, self.passhash)):
+  def verify_password(self, password):
+    if (check_password_hash(self.passhash, password)):
       return True
     return False
 
@@ -117,6 +108,7 @@ class UserModel():
   def json(self):
     return {
       "username": self.username,
-      "email": self.email
+      "email": self.email,
+      "passhash": self.passhash
     }
 

@@ -1,18 +1,10 @@
 from werkzeug.security import safe_str_cmp, generate_password_hash
-from private_config import private_config
+from private_config import private_config, connection_args
 from flask_restful import reqparse
 import psycopg2
 
 
 class RegistrantModel():
-  connection_args = {
-    "dbname":   private_config["pg_dbname"],
-    "user":     private_config["pg_user"],
-    "password": private_config["pg_password"],
-    "host":     private_config["pg_host"],
-    "port":     private_config["pg_port"]
-  }
-
   def __init__(self, username=None, email=None, password=None, passhash=None, token=None, _id=None):
     self.id = _id
     self.token = token
@@ -24,8 +16,6 @@ class RegistrantModel():
       self.email = email.lower()
     else:
       self.email = None
-    # new users pass in password
-    # db retrievals pass in _id and passhash
     if password:
       self.passhash = generate_password_hash(password)
     elif _id and passhash:
@@ -38,7 +28,7 @@ class RegistrantModel():
 
   def __dbinsert(self, query, query_values=None, exception_callback=None):
     try:
-      connection = psycopg2.connect(**RegistrantModel.connection_args)
+      connection = psycopg2.connect(**connection_args)
       cursor = connection.cursor()
       cursor.execute(query, query_values)
       connection.commit()
@@ -53,7 +43,7 @@ class RegistrantModel():
 
   def __dbdelete(self, query, query_values, exception_callback=None):
     try:
-      connection = psycopg2.connect(**RegistrantModel.connection_args)
+      connection = psycopg2.connect(**connection_args)
       cursor = connection.cursor()
       cursor.execute(query, query_values)
       connection.commit()
@@ -69,7 +59,7 @@ class RegistrantModel():
   def __dbfetchone(self, query, query_values=None, exception_callback=None):
     try:
       result = None
-      connection = psycopg2.connect(**RegistrantModel.connection_args)
+      connection = psycopg2.connect(**connection_args)
       cursor = connection.cursor()
       cursor.execute(query, query_values)
       result = cursor.fetchone()

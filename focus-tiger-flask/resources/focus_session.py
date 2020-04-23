@@ -33,7 +33,8 @@ class Focus(Resource):
   @jwt_required
   def get(self, focus_session_id):
     user_id = get_jwt_identity()
-    focus_session = FocusModel.get_focus_session_by_id(focus_session_id, user_id)
+    focus_session = FocusModel(_id=focus_session_id, user_id=user_id)
+    focus_session.get_by_id()
     if focus_session:
       return focus_session.json()
     return {"message": "invalid focus_session id"}, 400
