@@ -104,7 +104,6 @@ class UserModel():
       return True
     return False
 
-
   def json(self):
     return {
       "username": self.username,

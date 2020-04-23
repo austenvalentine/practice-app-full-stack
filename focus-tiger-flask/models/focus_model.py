@@ -1,6 +1,7 @@
 import psycopg2
 from private_config import connection_args
 from datetime import datetime, timezone
+import json
 
 class FocusModel():
   def __init__(self, _id=None, user_id=None, created=None, modified=None, focus=None, win=None, challenge=None, next_step=None):
@@ -21,8 +22,9 @@ class FocusModel():
       connection = psycopg2.connect(**connection_args)
       cursor = connection.cursor()
       cursor.execute(query, query_values)
-      cursor.fetchone()
+      result = cursor.fetchone()
       connection.close()
+      return result
     except:
       if exception_callback:
         exception_callback()
@@ -32,16 +34,19 @@ class FocusModel():
 
   # focus session methods
 
-  def get_by_id(cls, _id, user_id):
-    focus_session_data = None
+  def get_by_id(self):
     
-    db = sqlite3.connect('data.sqlite3')
-    result = db.execute("SELECT id, user_id, created, modified, focus, win, challenge, next_step FROM focus_session WHERE id=? AND user_id=?", (_id, user_id))
-    focus_session_data = result.fetchone()
-    db.close()
+    result = self.__dbfetchone(
+      "SELECT id, user_id, created, modified, focus, win, challenge, next_step FROM focus_session WHERE id=%s AND user_id=%s",
+      (self.id, self.user_id))
 
-    if focus_session_data:
-      return cls(*focus_session_data)
+    if result:
+      self.created    = result[2]
+      self.modified   = result[3]
+      self.focus      = result[4]
+      self.win        = result[5]
+      self.challenge  = result[6]
+      self.next_step  = result[7]
     else:
       return None
 
@@ -50,7 +55,7 @@ class FocusModel():
     focus_sessions = []
 
     db = sqlite3.connect('data.sqlite3')
-    results = db.execute("SELECT id, user_id, created, modified, focus, win, challenge, next_step FROM focus_session WHERE user_id=? ORDER BY created DESC, id DESC", [str(user_id)])
+    results = db.execute("SELECT id, user_id, created, modified, focus, win, challenge, next_step FROM focus_session WHERE user_id=%s ORDER BY created DESC, id DESC", [str(user_id)])
     focus_sessions_data = results.fetchall()
     db.close()
 
@@ -63,7 +68,7 @@ class FocusModel():
   def create_focus_session(cls, user_id, focus, win, challenge, next_step):
     try:
       db = sqlite3.connect('data.sqlite3')
-      db.execute("INSERT INTO focus_session (user_id, created, modified, focus, win, challenge, next_step) VALUES (?, strftime('%s', 'now'), strftime('%s', 'now'), ?, ?, ?, ?)", [user_id, focus, win, challenge, next_step])
+      db.execute("INSERT INTO focus_session (user_id, created, modified, focus, win, challenge, next_step) VALUES (%s, strftime('%s', 'now'), strftime('%s', 'now'), %s, %s, %s, %s)", [user_id, focus, win, challenge, next_step])
       db.commit()
       db.close()
     except sqlite3.IntegrityError:
@@ -97,8 +102,8 @@ class FocusModel():
     return ({
       "id": self.id,
       "user_id": self.user_id,
-      "created": self.created,
-      "modified": self.modified,
+      "created": int(self.created.strftime('%s')) * 100,
+      "modified": int(self.modified.strftime('%s')) * 100,
       "focus": self.focus,
       "win": self.win,
       "challenge": self.challenge,
