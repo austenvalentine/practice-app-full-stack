@@ -27,12 +27,11 @@ Hello {recipient_name},
 
 Please visit the URL and log in to complete your registration.
 
-{verify_uri}?token={token}
+{verify_uri}/{token}
 
 Thank you,
 
 {sender_name}
   """
   connection.sendmail(from_addr=sender_email, to_addrs=recipient_email, msg=message)
-  print("email sent to ", recipient_email)
   return token

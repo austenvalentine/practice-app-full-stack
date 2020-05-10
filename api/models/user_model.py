@@ -78,7 +78,7 @@ class UserModel():
       self.username = requested_user[1]
       self.email = requested_user[2]
       self.passhash = requested_user[3]
-      return self
+      return True
     return None
 
   def get_by_username(self):
@@ -87,7 +87,7 @@ class UserModel():
       self.id = requested_user[0]
       self.email = requested_user[2]
       self.passhash = requested_user[3]
-      return self
+      return True
     return None
 
   def get_by_email(self):

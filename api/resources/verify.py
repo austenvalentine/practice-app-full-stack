@@ -1,15 +1,11 @@
-from flask_restful import Resource, reqparse
+from flask_restful import Resource
 from models.registrant_model import RegistrantModel
 from models.user_model import UserModel
 
-parser = reqparse.RequestParser()
-parser.add_argument("token", type=str, required=True, help="missing token")
-
 class Verify(Resource):
-  def get(self):
-    args = parser.parse_args()
-    token = args["token"]
-    registrant = RegistrantModel(token=token).get_by_token()
+  def get(self, token):
+    registrant = RegistrantModel(token=token)
+    registrant.get_by_token()
     if registrant:
       user = UserModel(
         username=registrant.username,

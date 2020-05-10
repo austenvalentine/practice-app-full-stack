@@ -113,7 +113,7 @@ class RegistrantModel():
       self.username = requested_registrant[1]
       self.email = requested_registrant[2]
       self.passhash = requested_registrant[3]
-      return self
+      return True
 
   def delete(self):
     self.__dbdelete("DELETE FROM registrant WHERE email=%s", [self.email])

@@ -10,8 +10,8 @@ parser.add_argument("password", type=str, required=True, help="invalid password"
 class Login(Resource):
   def post(self):
     args = parser.parse_args()
-    user = UserModel(username=args["username"]).get_by_username()
-    print("user:", user.json())
+    user = UserModel(username=args["username"])
+    user.get_by_username()
     if user and user.verify_password(args["password"]):
       user_token = create_access_token(identity=user.id)
       return {"access_token":user_token}, 200

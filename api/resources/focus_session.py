@@ -43,34 +43,31 @@ class Focus(Resource):
   def post(self):
     user_id = get_jwt_identity()
     args = parser.parse_args()
-    result = FocusModel.create_focus_session(
+    result = FocusModel(
       user_id=user_id,
       focus=args["focus"],
       win=args["win"],
       challenge=args["challenge"],
       next_step=args["next_step"]
-    )
+    ).add()
 
     if result:
       return {"message" : "focus session successfully added"}, 200
     else: 
-      return {"message" : "input data failed database check"}, 400
+      return {"message" : "data input failed"}, 400
 
   @jwt_required
   def put(self, focus_session_id):
     user_id = get_jwt_identity()
     args = parser.parse_args()
-    # check that the focus session exists
-    if not FocusModel.get_focus_session_by_id(focus_session_id, user_id):
+    focus_session = FocusModel(_id=focus_session_id, user_id=user_id)
+    if not focus_session.get_by_id():
       return {"message": "invalid focus session id"}, 400
-    result = FocusModel.update_focus_session(
-      focus_session_id=focus_session_id,
-      user_id=user_id,
-      focus=args["focus"],
-      win=args["win"],
-      challenge=args["challenge"],
-      next_step=args["next_step"]
-    )
+    focus_session.focus     = args["focus"],
+    focus_session.win       = args["win"],
+    focus_session.challenge = args["challenge"],
+    focus_session.next_step = args["next_step"]
+    result = focus_session.update()
     if result:
       return {"message":"focus session successfully updated"}, 200
     else: 
@@ -79,8 +76,8 @@ class Focus(Resource):
   @jwt_required
   def delete(self, focus_session_id):
     user_id = get_jwt_identity()
-    # check that the focus session exists
-    if not FocusModel.get_focus_session_by_id(focus_session_id, user_id):
+    focus_session = FocusModel(_id=focus_session_id, user_id=user_id)
+    if not focus_session.exists():
       return {"message": "invalid focus session id"}, 400
-    FocusModel.delete_focus_session(focus_session_id, user_id)
+    focus_session.delete()
     return {"message":"focus session successfully deleted"}

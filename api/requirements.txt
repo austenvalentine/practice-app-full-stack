@@ -1,0 +1,6 @@
+virtualenv==16.7.5
+Python==3.6.9
+Flask=1.1.1
+Flask-RESTful==0.3.7
+Flask-JWT-Extended==3.24.1
+psycopg2-binary==2.8.5

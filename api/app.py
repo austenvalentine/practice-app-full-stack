@@ -21,7 +21,7 @@ api.add_resource(Login, '/login')
 api.add_resource(Focus, '/focus_session/<int:focus_session_id>', '/focus_session')
 api.add_resource(FocusSessions, '/focus_sessions')
 api.add_resource(Register, '/register')
-api.add_resource(Verify, '/verify')
+api.add_resource(Verify, '/verify/<string:token>')
 
 if __name__=="__main__":
   print(app.config["SECRET_KEY"])
